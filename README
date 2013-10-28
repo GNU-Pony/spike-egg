@@ -1,0 +1,12 @@
+Hatch spike into existance on your system.
+
+This is used to install Spike on a system
+that you are intalling.
+
+
+USAGE:  hatch-spike SYSTEM_ROOT_MOUNT_POINT
+
+Normally you mount the system you are
+installing to /mnt. In this case you run
+hatch-spike /mnt.
+
