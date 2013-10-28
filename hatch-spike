@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+##
+# spike-egg – hatch spike into existance on your system
+# 
+# Copyright © 2013  Mattias Andrée (maandree@member.fsf.org)
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+
+# Get GNU/Pony Git root
+if [ -z "${GNUPONY_GIT_ROOT}" ]; then
+    GNUPONY_GIT_ROOT="https://github.com/GNU-Pony"
+fi
+
+# Get GNU/Pony Git repositores
+if [ -z "${GNUPONY_SPIKE_REPO}" ]; then
+    GNUPONY_SPIKE_REPO="${GNUPONY_GIT_ROOT}/spike.git"
+fi
+if [ -z "${GNUPONY_PORTS_TREE_REPO}" ]; then
+    GNUPONY_PORTS_TREE_REPO="${GNUPONY_GIT_ROOT}/spike-repositories.git"
+fi
+
+
+# Get system root, usally /mnt
+if [ ! $# = 1 ]; then
+    echo 'USAGE:  hatch-spike SYSTEM_ROOT_MOUNT_POINT'
+    exit 1
+fi
+root="$1"
+
+
+# Put Spike into existance
+mkdir -p -- "${root}/opt" &&
+git clone "${GNUPONY_SPIKE_REPO}" -- "${root}/opt/spike" || exit 2
+
+# Create directories for Spike
+mkdir -p -- "${root}/opt/spike/repositories" &&
+mkdir -p -- "${root}/var/opt/spike" &&
+ln -s -- "../../var/opt/spike" "${root}/opt/spike/var" || exit 2
+
+
+# Download ports tree
+cd "${root}/opt/spike/repositories"
+for repo in core extra more limbo ; do
+    git clone --branch "${repo}" --single-branch "${GNUPONY_PORTS_TREE_REPO}" -- "${repo}" || exit 2
+done
+cd -
+
+
+# Notify user about success
+echo 
+echo 
+echo Spike has been hatched into /opt/spike on "${root}"
+echo 
+echo Do not forget set the environment variable SPIKE_PATH
+echo to /opt/spike on "${root}" so that system knows this.
+echo 
+echo 
+
