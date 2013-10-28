@@ -43,10 +43,12 @@ root="$1"
 
 
 # Put Spike into existance
+echo -e '\e[01;34mBootstrapping Spike\e[00m'
 mkdir -p -- "${root}/opt" &&
 git clone "${GNUPONY_SPIKE_REPO}" -- "${root}/opt/spike" || exit 2
 
 # Create directories for Spike
+echo -e '\e[01;34mCreating additional directories for Spike\e[00m'
 mkdir -p -- "${root}/opt/spike/repositories" &&
 mkdir -p -- "${root}/var/opt/spike" &&
 ln -s -- "../../var/opt/spike" "${root}/opt/spike/var" || exit 2
@@ -55,6 +57,7 @@ ln -s -- "../../var/opt/spike" "${root}/opt/spike/var" || exit 2
 # Download ports tree
 cd "${root}/opt/spike/repositories"
 for repo in core extra more limbo ; do
+    echo -e '\e[01;34mBootstrapping the '"${repo}"' repository\e[00m'
     git clone --branch "${repo}" --single-branch "${GNUPONY_PORTS_TREE_REPO}" -- "${repo}" || exit 2
 done
 cd -
