@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ##
-# spike-egg – hatch spike into existance on your system
+# spike-egg – hatch spike into existence on your system
 # 
 # Copyright © 2013  Mattias Andrée (maandree@member.fsf.org)
 # 
@@ -42,7 +42,7 @@ fi
 root="$1"
 
 
-# Put Spike into existance
+# Put Spike into existence
 echo -e '\e[01;34mBootstrapping Spike\e[00m'
 mkdir -p -- "${root}/opt" &&
 git clone "${GNUPONY_SPIKE_REPO}" -- "${root}/opt/spike" || exit 2
